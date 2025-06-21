@@ -1,5 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,15 +10,22 @@
 @layer base {
   :root {
     /* Unified color palette */
-    --primary-color: 224.3 76.3% 48%;
+    --color-primary: 224.3 76.3% 48%;
+    --color-accent: 160.1 84% 39.4%;
+    --color-bg: 0 0% 100%;
+    --color-surface: 0 0% 98%;
+    --color-text: 215 28% 17%;
+    --color-muted: 215.4 16.3% 46.9%;
+
+    --primary-color: var(--color-primary);
     --primary-color-foreground: 0 0% 100%;
     --secondary-color: 271.5 81.3% 56%;
     --secondary-color-foreground: 0 0% 100%;
-    --accent-color: 160.1 84% 39.4%;
+    --accent-color: var(--color-accent);
     --accent-foreground-color: 0 0% 100%;
-    --background-color: 210 20% 98%;
-    --background-color-desktop: 210 20% 98%;
-    --text-color: 215 28% 17%;
+    --background-color: var(--color-bg);
+    --background-color-desktop: var(--color-bg);
+    --text-color: var(--color-text);
 
     /* Existing tokens mapped to the new palette */
     --background: var(--background-color);
@@ -35,8 +43,8 @@
     --secondary: var(--secondary-color);
     --secondary-foreground: var(--secondary-color-foreground);
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-text);
 
     --accent: var(--accent-color);
     --accent-foreground: var(--accent-foreground-color);
@@ -59,6 +67,12 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
+    /* Gradient variables */
+    --gradient-direction: to right;
+    --header-gradient: linear-gradient(var(--gradient-direction), #f8fafc, #e0f2fe);
+    --sidebar-gradient: linear-gradient(var(--gradient-direction), #ffffff, #f1f5f9);
+    --neon-glow: 0 0 12px rgba(124, 58, 237, 0.7);
+
     /* Custom surface colors */
     --surface: #ffffff;
     --surface-50: #f8fafc;
@@ -67,9 +81,14 @@
   }
 
   .dark {
-    --background-color: 221 39% 11%;
-    --background-color-desktop: 215 28% 17%;
-    --text-color: 210 20% 98%;
+    --color-bg: 221 39% 11%;
+    --color-surface: 240 3.7% 15.9%;
+    --color-text: 210 20% 98%;
+    --color-muted: 215 20.2% 65.1%;
+
+    --background-color: var(--color-bg);
+    --background-color-desktop: var(--color-bg);
+    --text-color: var(--color-text);
 
     /* Map existing tokens */
     --background: var(--background-color);
@@ -87,8 +106,8 @@
     --secondary: var(--secondary-color);
     --secondary-foreground: var(--secondary-color-foreground);
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-text);
 
     --accent: var(--accent-color);
     --accent-foreground: var(--accent-foreground-color);
@@ -113,6 +132,9 @@
     --surface-50: #1e293b;
     --surface-100: #334155;
     --surface-200: #475569;
+
+    --header-gradient: linear-gradient(var(--gradient-direction), #1f2937, #4b5563);
+    --sidebar-gradient: linear-gradient(var(--gradient-direction), #111827, #1f2937);
   }
 }
 
@@ -125,12 +147,28 @@
   html {
     scroll-behavior: smooth;
     font-feature-settings: "cv03", "cv04", "cv11";
+    transition: background-color 0.3s, color 0.3s;
   }
 
   body {
-    @apply bg-background text-foreground antialiased lg:bg-[hsl(var(--background-color-desktop))];
+    @apply bg-background text-foreground antialiased transition-colors lg:bg-[hsl(var(--background-color-desktop))];
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  /* Arabic font optimization */
+  html[lang="ar"] {
+    font-family: 'Cairo', 'Amiri', 'Segoe UI', 'Tahoma', sans-serif;
+  }
+
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] h4,
+  html[lang="ar"] h5,
+  html[lang="ar"] h6 {
+    font-family: 'Cairo', 'Amiri', sans-serif;
+    font-weight: 600;
   }
 
   /* Headings */
@@ -171,6 +209,18 @@
   /* Layout utilities */
   .page-container {
     @apply mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .header-gradient {
+    background-image: var(--header-gradient);
+  }
+
+  .sidebar-gradient {
+    background-image: var(--sidebar-gradient);
+  }
+
+  .neon-shadow {
+    box-shadow: var(--neon-glow);
   }
 
   .content-wrapper {
@@ -241,14 +291,34 @@
   .nav-link-inactive {
     @apply text-gray-700 dark:text-gray-300 hover:bg-gray-100/70 dark:hover:bg-gray-800/70 hover:scale-105;
   }
+
+  /* Sidebar specific styles */
+  .sidebar-rail {
+    @apply w-16 transition-all duration-300 ease-in-out;
+  }
+
+  .sidebar-expanded {
+    @apply w-64 transition-all duration-300 ease-in-out;
+  }
+
+  /* Scrollbar styles */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thumb-sidebar-accent\/30::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--sidebar-accent) / 0.3);
+  }
 }
 
 /* RTL specific overrides */
 [dir="rtl"] {
+  --gradient-direction: to left;
+
   .text-left {
     text-align: right;
   }
-  
+
   .text-right {
     text-align: left;
   }
@@ -280,4 +350,20 @@
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .nav-link-active {
+    @apply ring-2 ring-primary;
+  }
 }

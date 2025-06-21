@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -65,10 +64,25 @@ const appointmentSchema = z.object({
 
 type AppointmentFormData = z.infer<typeof appointmentSchema>;
 
+interface Appointment {
+  id: string;
+  clientName: string;
+  clientPhone: string;
+  activityType: 'courts' | 'swimming';
+  selectedType: string;
+  selectedDate: Date;
+  selectedTime: string;
+  duration: number;
+  price: number;
+  status: string;
+  notes?: string;
+  createdAt?: Date;
+}
+
 interface AppointmentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  appointment?: any;
+  appointment?: Appointment;
   mode?: 'create' | 'edit' | 'view';
 }
 
@@ -91,8 +105,8 @@ const timeSlots = [
 
 export function AppointmentModal({ isOpen, onClose, appointment, mode = 'create' }: AppointmentModalProps) {
   const [activeTab, setActiveTab] = useState<'details' | 'management'>('details');
-  const [appointments, setAppointments] = useState<any[]>([]);
-  const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
   const form = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentSchema),
@@ -111,26 +125,16 @@ export function AppointmentModal({ isOpen, onClose, appointment, mode = 'create'
 
   const watchActivityType = form.watch('activityType');
   const watchSelectedType = form.watch('selectedType');
+  const watchDuration = form.watch('duration');
 
-  // Auto-calculate price based on activity type and selected type
+  // Auto-calculate price based on activity type, selected type and duration
   useEffect(() => {
     const types = watchActivityType === 'courts' ? courtTypes : swimmingTypes;
-    const selectedTypeData = types.find(t => t.value === watchSelectedType);
-    if (selectedTypeData) {
-      const duration = form.getValues('duration');
-      form.setValue('price', selectedTypeData.price * duration);
+    const selectedTypeData = types.find((t) => t.value === watchSelectedType);
+    if (selectedTypeData && watchDuration) {
+      form.setValue('price', selectedTypeData.price * watchDuration);
     }
-  }, [watchActivityType, watchSelectedType, form]);
-
-  // Update price when duration changes
-  useEffect(() => {
-    const duration = form.watch('duration');
-    const types = watchActivityType === 'courts' ? courtTypes : swimmingTypes;
-    const selectedTypeData = types.find(t => t.value === watchSelectedType);
-    if (selectedTypeData && duration) {
-      form.setValue('price', selectedTypeData.price * duration);
-    }
-  }, [form.watch('duration')]);
+  }, [watchActivityType, watchSelectedType, watchDuration, form]);
 
   // Load existing appointments
   useEffect(() => {
@@ -170,11 +174,19 @@ export function AppointmentModal({ isOpen, onClose, appointment, mode = 'create'
   const onSubmit = (data: AppointmentFormData) => {
     console.log('Creating appointment:', data);
     
-    // Auto-appointment logic
-    const newAppointment = {
+    // Create properly typed appointment object
+    const newAppointment: Appointment = {
       id: Date.now().toString(),
-      ...data,
+      clientName: data.clientName,
+      clientPhone: data.clientPhone,
+      activityType: data.activityType,
+      selectedType: data.selectedType,
+      selectedDate: data.selectedDate,
+      selectedTime: data.selectedTime,
+      duration: data.duration,
+      price: data.price,
       status: 'confirmed',
+      notes: data.notes,
       createdAt: new Date(),
     };
 
@@ -189,7 +201,7 @@ export function AppointmentModal({ isOpen, onClose, appointment, mode = 'create'
     onClose();
   };
 
-  const handleEdit = (appointment: any) => {
+  const handleEdit = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
     form.reset({
       clientPhone: appointment.clientPhone,

@@ -59,20 +59,15 @@ const Sidebar = () => {
         variants={sidebarVariants}
         animate={sidebarOpen ? "open" : "closed"}
         className={cn(
-          'fixed inset-y-0 flex w-64 flex-col bg-sidebar text-sidebar-foreground shadow-md transition-transform duration-300 lg:sticky lg:left-0 lg:top-0 lg:z-auto lg:translate-x-0',
+          'fixed inset-y-0 flex w-64 flex-col sidebar-gradient text-sidebar-foreground shadow-md transition-transform duration-300 lg:sticky lg:left-0 lg:top-0 lg:z-auto lg:translate-x-0 dark:neon-shadow',
           language === 'ar' ? 'right-0' : 'left-0'
         )}
       >
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-4 bg-gradient-primary">
-            <AppLogo location="sidebar" className="w-20 h-16" />
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="p-2 text-white rounded-md lg:hidden"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+      <div className="flex items-center space-x-2">
+  <AppLogo variant="primary" className="h-10" />
+  <AppLogo variant="secondary" className="h-8" />
+</div>
 
           <nav className="flex-1 p-4 overflow-y-auto">
             {menuItems.map((item) => {
@@ -90,7 +85,7 @@ const Sidebar = () => {
                       )
                     }
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-5 h-5 dark:text-fuchsia-400" />
                     <span>{item.label}</span>
                   </NavLink>
                   {item.subItems && (
@@ -108,7 +103,7 @@ const Sidebar = () => {
                             )
                           }
                         >
-                          <sub.icon className="w-4 h-4" />
+                          <sub.icon className="w-4 h-4 dark:text-fuchsia-400" />
                           {sub.label}
                         </NavLink>
                       ))}

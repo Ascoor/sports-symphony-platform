@@ -56,7 +56,7 @@ const revenueData = [
   { month: 'Jun', revenue: 26150, target: 25000 },
 ];
 
-export default function AdminDashboard() {
+export default function PremiumDashboard() {
   const { t } = useTranslation();
   const [timeRange, setTimeRange] = useState('6months');
 
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
 
   const stats = [
     {
-      title: t('dashboard.totalBookings'),
+      title: 'Total Bookings',
       value: '2,847',
       change: '+12.5%',
       trend: 'up',
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
       bgGradient: 'from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20'
     },
     {
-      title: t('dashboard.activeMembers'),
+      title: 'Active Members',
       value: '1,234',
       change: '+8.2%',
       trend: 'up',
@@ -99,7 +99,7 @@ export default function AdminDashboard() {
       bgGradient: 'from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20'
     },
     {
-      title: t('dashboard.monthlyRevenue'),
+      title: 'Monthly Revenue',
       value: '$26,150',
       change: '+15.3%',
       trend: 'up',
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
       bgGradient: 'from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20'
     },
     {
-      title: t('dashboard.occupancyRate'),
+      title: 'Occupancy Rate',
       value: '87.3%',
       change: '+3.1%',
       trend: 'up',
@@ -129,20 +129,20 @@ export default function AdminDashboard() {
         >
           <div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-900 dark:from-slate-100 dark:via-blue-200 dark:to-indigo-100 bg-clip-text text-transparent">
-              {t('dashboard.analyticsTitle')}
+              Sports Analytics Dashboard
             </h1>
             <p className="text-slate-600 dark:text-slate-400 text-lg mt-2">
-              {t('dashboard.analyticsSubtitle')}
+              Real-time insights into your sports facility performance
             </p>
           </div>
           <div className="flex gap-3">
             <Button variant="outline" className="gap-2">
               <Filter className="w-4 h-4" />
-              {t('dashboard.filter')}
+              Filter
             </Button>
             <Button className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
               <Download className="w-4 h-4" />
-              {t('dashboard.exportReport')}
+              Export Report
             </Button>
           </div>
         </motion.div>
@@ -202,13 +202,13 @@ export default function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-blue-600" />
-                  {t('dashboard.monthlyBookingsTrend')}
+                  Monthly Bookings Trend
                 </CardTitle>
-                <CardDescription>{t('dashboard.bookingVolumeDesc')}</CardDescription>
+                <CardDescription>Booking volume over the last 6 months</CardDescription>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={{
-                  bookings: { label: t('bookings'), color: 'hsl(217, 91%, 60%)' }
+                  bookings: { label: "Bookings", color: "hsl(217, 91%, 60%)" }
                 }} className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={bookingData}>
@@ -241,14 +241,14 @@ export default function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-emerald-600" />
-                  {t('dashboard.revenueVsTarget')}
+                  Revenue vs Target
                 </CardTitle>
-                <CardDescription>{t('dashboard.revenuePerformanceDesc')}</CardDescription>
+                <CardDescription>Monthly revenue performance against targets</CardDescription>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={{
-                  revenue: { label: t('revenue'), color: 'hsl(142, 76%, 36%)' },
-                  target: { label: t('dashboard.revenueVsTarget'), color: 'hsl(142, 76%, 60%)' }
+                  revenue: { label: "Revenue", color: "hsl(142, 76%, 36%)" },
+                  target: { label: "Target", color: "hsl(142, 76%, 60%)" }
                 }} className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={revenueData}>
@@ -289,9 +289,9 @@ export default function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Activity className="w-5 h-5 text-purple-600" />
-                  {t('dashboard.activityDistribution')}
+                  Activity Distribution
                 </CardTitle>
-                <CardDescription>{t('dashboard.bookingDistributionDesc')}</CardDescription>
+                <CardDescription>Booking distribution by sport type</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px] flex items-center">
@@ -349,15 +349,15 @@ export default function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-orange-600" />
-                  {t('dashboard.weeklyUsagePattern')}
+                  Weekly Usage Pattern
                 </CardTitle>
-                <CardDescription>{t('dashboard.usagePatternDesc')}</CardDescription>
+                <CardDescription>Hourly booking patterns throughout the week</CardDescription>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={{
-                  morning: { label: t('dashboard.morning'), color: 'hsl(43, 96%, 56%)' },
-                  afternoon: { label: t('dashboard.afternoon'), color: 'hsl(25, 95%, 53%)' },
-                  evening: { label: t('dashboard.evening'), color: 'hsl(20, 90%, 48%)' }
+                  morning: { label: "Morning", color: "hsl(43, 96%, 56%)" },
+                  afternoon: { label: "Afternoon", color: "hsl(25, 95%, 53%)" },
+                  evening: { label: "Evening", color: "hsl(20, 90%, 48%)" }
                 }} className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={weeklyData}>
